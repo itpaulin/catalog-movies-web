@@ -6,7 +6,6 @@ import { useCallback, useEffect } from 'react'
 
 export const MovieList = () => {
   const { data, isFetching, fetchNextPage, hasNextPage } = useMovieContext()
-  console.log('🚀 ~ MovieList ~ data:', data)
 
   const handleScroll = useCallback(() => {
     if (
