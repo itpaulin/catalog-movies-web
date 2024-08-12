@@ -30,9 +30,11 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const reindexMovies = useCallback(async () => {
     setIsLoadingReinxed(true)
     try {
+      queryClient.resetQueries('movies')
       await axios.get('http://localhost:3000/movies/renew')
       queryClient.invalidateQueries('movies')
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Erro ao reindexar filmes:', error)
       alert('Erro ao reindexar filmes.')
     } finally {
