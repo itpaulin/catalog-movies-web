@@ -10,11 +10,12 @@ export const MovieList = () => {
   const handleScroll = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 100 >=
-      document.documentElement.offsetHeight
+        document.documentElement.offsetHeight &&
+      !isFetching
     ) {
       fetchNextPage()
     }
-  }, [fetchNextPage])
+  }, [fetchNextPage, isFetching])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
@@ -25,7 +26,12 @@ export const MovieList = () => {
   }, [handleScroll, fetchNextPage, hasNextPage, isFetching])
 
   return (
-    <Stack justifyContent={'center'} alignItems={'center'} mt={2}>
+    <Stack
+      justifyContent={'center'}
+      alignItems={'center'}
+      mt={2}
+      overflow={'hidden'}
+    >
       <Grid
         container
         alignItems="start"
@@ -33,14 +39,15 @@ export const MovieList = () => {
         direction={'row'}
         spacing={3}
       >
-        {data?.map((movie: Movie) => (
-          <Grid item key={movie.id}>
+        {data?.map((movie: Movie, index) => (
+          <Grid item key={index}>
             <MovieItemCard title={movie.title} imagePath={movie.imagePath} />
           </Grid>
         ))}
       </Grid>
 
       {isFetching && <CircularProgress size={300} />}
+      {!hasNextPage && !isFetching && <p>No more movies</p>}
     </Stack>
   )
 }
