@@ -4,6 +4,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 
 export const MovieContextProvider = ({ children }: PropsWithChildren) => {
+  const [isLoadingReinxed, setIsLoadingReinxed] = useState<boolean>(false)
   const queryClient = useQueryClient()
   const [limit] = useState(10)
 
@@ -27,18 +28,21 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   })
 
   const reindexMovies = useCallback(async () => {
+    setIsLoadingReinxed(true)
     try {
       await axios.get('http://localhost:3000/movies/renew')
+      queryClient.invalidateQueries('movies')
     } catch (error) {
       console.error('Erro ao reindexar filmes:', error)
       alert('Erro ao reindexar filmes.')
+    } finally {
+      setIsLoadingReinxed(false)
     }
-    queryClient.invalidateQueries('movies')
   }, [queryClient])
 
   const value: IMovieContextValues = {
     data: data?.pages.flatMap((page) => page.data),
-    isFetching,
+    isFetching: isFetching || isLoadingReinxed,
     reindexMovies,
     fetchNextPage: async () => await fetchNextPage(),
     hasNextPage,
