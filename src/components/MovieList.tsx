@@ -1,5 +1,5 @@
 import { Stack, Grid, CircularProgress } from '@mui/material'
-import { MovieItemCard } from './movie-item-card'
+import { MovieItemCard } from './MovieItemCard'
 import { Movie } from '../types/movie'
 import { useMovieContext } from '../context/useMovieContext'
 import { useCallback, useEffect } from 'react'

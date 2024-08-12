@@ -1,5 +1,5 @@
 import { Card, CardMedia, CardContent, Typography } from '@mui/material'
-import { BASE_URL_IMAGES } from '../constants'
+import { BASE_URL_IMAGES } from '../api/constants'
 
 export interface IMovieItemCardProps {
   title: string
