@@ -26,18 +26,14 @@ export const MovieList = () => {
   }, [handleScroll, fetchNextPage, hasNextPage, isFetching])
 
   return (
-    <Stack
-      justifyContent={'center'}
-      alignItems={'center'}
-      mt={2}
-      overflow={'hidden'}
-    >
+    <Stack justifyContent={'center'} alignItems={'center'} mt={2}>
       <Grid
         container
         alignItems="start"
         justifyContent={'center'}
         direction={'row'}
         spacing={3}
+        mb={2}
       >
         {data?.map((movie: Movie, index) => (
           <Grid item key={index}>
