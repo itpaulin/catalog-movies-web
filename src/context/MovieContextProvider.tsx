@@ -5,7 +5,7 @@ import axios from 'axios'
 
 export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient()
-  const [limit] = useState(20)
+  const [limit] = useState(10)
 
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ['movies'],
@@ -18,6 +18,7 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
       })
       return response.data
     },
+
     getNextPageParam: (lastPage, allPages) => {
       const maxPages = Math.ceil(lastPage.total / limit)
       const nextPage = allPages.length + 1
@@ -26,7 +27,12 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   })
 
   const reindexMovies = useCallback(async () => {
-    await axios.get('http://localhost:3000/movies/update')
+    try {
+      await axios.get('http://localhost:3000/movies/renew')
+    } catch (error) {
+      console.error('Erro ao reindexar filmes:', error)
+      alert('Erro ao reindexar filmes.')
+    }
     queryClient.invalidateQueries('movies')
   }, [queryClient])
 
@@ -34,7 +40,7 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
     data: data?.pages.flatMap((page) => page.data),
     isFetching,
     reindexMovies,
-    fetchNextPage,
+    fetchNextPage: async () => await fetchNextPage(),
     hasNextPage,
   }
   return <MovieContext.Provider value={value}>{children}</MovieContext.Provider>
