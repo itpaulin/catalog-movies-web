@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useState } from 'react'
 import { IMovieContextValues, MovieContext } from './MovieContext'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
-import axios from 'axios'
+import axiosInstance from '../api/axiosInstance'
 
 export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const [isLoadingReinxed, setIsLoadingReinxed] = useState<boolean>(false)
@@ -11,7 +11,7 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ['movies'],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await axios.get('http://localhost:3000/movies', {
+      const response = await axiosInstance.get('/movies', {
         params: {
           page: pageParam,
           limit,
@@ -31,7 +31,7 @@ export const MovieContextProvider = ({ children }: PropsWithChildren) => {
     setIsLoadingReinxed(true)
     try {
       queryClient.resetQueries('movies')
-      await axios.get('http://localhost:3000/movies/renew')
+      await axiosInstance.get('/movies/renew')
       queryClient.invalidateQueries('movies')
     } catch (error) {
       // eslint-disable-next-line no-console
