@@ -32,3 +32,5 @@ npm run dev
 ```
 
 O .ENV já está incluso e configurado
+
+A aplicação estará disponível em http://localhost:5173.
